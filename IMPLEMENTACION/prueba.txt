@@ -1,0 +1,9 @@
+int a = 5, b = 10;
+main () {
+    while (a < b) {
+        printf("El valor de a es", a);
+        a = a + 1;
+    }
+}
+//@ (main)
+
