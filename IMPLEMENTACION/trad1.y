@@ -135,6 +135,7 @@ var_init:     IDENTIF                    { sprintf (temp, "(setq %s 0)", $1.code
             ;
 
 
+
 bucle_while:  WHILE '(' expresion ')' '{' lista_sentencias '}' { 
                   sprintf (temp, "(loop while %s do\n%s\n)", $3.code, $6.code) ;
                   $$.code = gen_code (temp) ; 

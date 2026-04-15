@@ -1,9 +1,161 @@
-int a = 5, b = 10;
-main () {
-    while (a < b) {
-        printf("El valor de a es", a);
+#define INC(x) x=x+1
+#define DEC(x) x=x-1
+
+// ============================================================
+// SPEC 1: Variables globales
+// ============================================================
+
+// 1a: declaracion simple
+int a;
+
+// 1b: declaracion con inicializacion
+int b = 5;
+
+// 1c: declaracion multiple con asignaciones opcionales
+int c = 3, d, e = 1;
+
+// ============================================================
+// SPEC 2: Funcion main
+// ============================================================
+
+// ============================================================
+// SPEC 5: Operadores logicos y de comparacion
+// ============================================================
+
+// ============================================================
+// SPEC 9: FOR
+// ============================================================
+
+suma(int x, int y) {
+    return x + y;
+}
+
+cuadrado(int v) {
+    return v * v;
+}
+
+es_par(int v) {
+    int ep;
+    if (v % 2 == 0) {
+        ep = 1;
+    } else {
+        ep = 0;
+    }
+    return ep;
+}
+
+fact(int n) {
+    int f;
+    if (n == 1) {
+        f = 1;
+    } else {
+        f = n * fact(n - 1);
+    }
+    return f;
+}
+
+main() {
+
+    // SPEC 3: puts
+    puts("Hola mundo");
+
+    // SPEC 4: printf con un elemento
+    printf("%d", a);
+
+    // SPEC 4: printf con multiples elementos
+    printf("%d", b, c);
+
+    // SPEC 5: operadores aritmeticos
+    a = b + c;
+    a = b - c;
+    a = b * c;
+    a = b / c;
+    a = b % c;
+
+    // SPEC 5: operadores de comparacion
+    a = b == c;
+    a = b != c;
+    a = b < c;
+    a = b > c;
+    a = b <= c;
+    a = b >= c;
+
+    // SPEC 5: operadores logicos
+    a = b && c;
+    a = b || c;
+    a = !b;
+
+    // SPEC 6: while
+    while (a != 10) {
         a = a + 1;
     }
+
+    // SPEC 7: if sin else
+    if (a == 0) {
+        puts("a es cero");
+    }
+
+    // SPEC 7: if con else
+    if (a == 0) {
+        puts("a es cero");
+    } else {
+        puts("a no es cero");
+    }
+
+    // SPEC 8: variables locales
+    int local1;
+    int local2 = 7;
+
+    // SPEC 8: asignacion con setf
+    local1 = local2 + 1;
+
+    // SPEC 9: for con INC
+    int i;
+    for (i = 0; i < 5; INC(i)) {
+        printf("%d", i);
+    }
+
+    // SPEC 9: for con DEC
+    int j = 5;
+    for (j = 5; j > 0; DEC(j)) {
+        printf("%d", j);
+    }
+
+    // SPEC 10: switch sin default
+    switch (a) {
+        case 1: puts("uno"); break;
+        case 2: puts("dos"); break;
+    }
+
+    // SPEC 10: switch con default
+    switch (a) {
+        case 1: puts("uno"); break;
+        case 2: puts("dos"); break;
+        default: puts("otro"); break;
+    }
+
+    // SPEC 11: llamadas a funciones
+    a = suma(2, 3);
+    a = cuadrado(4);
+    a = es_par(6);
+    a = fact(5);
+
+    // SPEC 11: llamada como sentencia (procedimiento)
+    es_par(3);
+
+    // SPEC 12: vectores - declaracion
+    int v[5];
+
+    // SPEC 12: vectores - escritura
+    v[0] = 10;
+    v[1] = v[0] + 3;
+
+    // SPEC 12: vectores - lectura en expresion
+    a = v[0] + v[1];
+
+    // SPEC 12: vectores - lectura en printf
+    printf("%d", v[0]);
+
 }
 //@ (main)
 
