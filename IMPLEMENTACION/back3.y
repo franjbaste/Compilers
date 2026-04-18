@@ -1,4 +1,9 @@
 %{                          // SECTION 1 Declarations for C-Bison
+/*
+407, Fran Jurado Basté, Sergio González Jiménez
+Correos: 100522213@alumnos.uc3m.es, 100522264@alumnos.uc3m.es
+*/
+
 #include <stdio.h>
 #include <ctype.h>            // tolower()
 #include <string.h>           // strcmp() 
@@ -46,6 +51,8 @@ typedef struct s_attr {
 %token AND
 %token IF 
 %token PROGN
+%token MOD
+%token NEQ
 
 
 // %prec section not needed in LISP
@@ -69,27 +76,29 @@ r_exprSeq:    exprSeq                           { ; }
 expression1:  expression                        { ; }  // Lisp can evaluate arithmetical (and similar) expressions in REPL mode
                                                        // REPL Mode should print out the evaluated expressions ==> Future TODO for the Forth translation
 
-            | '(' SETQ IDENTIF number ')'       { /* */ }  // This is the declaration of a variable which in Forth has to be of global scope
+            | '(' SETQ IDENTIF number ')'       { printf("variable %s %s !", $3.code,$3.code);}  // This is the declaration of a variable which in Forth has to be of global scope
                                                                                                       
-            | '(' SETF /* */ ')'                { /* */ }    // Using a variable as receiver requires adding the store operator (!) in Forth 
+            | '(' SETF IDENTIF expression ')'   { printf(" %s !", $3.code); }   // Using a variable as receiver requires adding the store operator (!) in Forth 
 
-            | '(' PRINT STRING ')'              { /* */ }
+            | '(' PRINT STRING ')'              { printf (" .\" %s\" ", $3.code) ; }
 
-            | '(' PRINC /* */ ')'               { /* */ }    // Princ should be able to print both expreesions and strings
-           
+            | '(' PRINC expression ')'          { printf (" . ") ; }  // Princ should be able to print both expreesions and strings
+
+            | '(' PRINC STRING ')'              { printf (" .\" %s\" ", $3.code) ; }
+
             | '(' PROGN exprSeq ')'             { /* */ }
 
             | '(' MAIN ')'                      { printf (" main\n") ; } // call to the main function 
 
-            | '(' DEFUN MAIN                    { /* */ } 
-                '(' ')' exprSeq ')'             {  /* */ }
+            | '(' DEFUN MAIN                    { printf (" : main\n") ; } 
+                '(' ')' exprSeq ')'             { printf (" ;\n") ; }
 
 // In real Lisp some expressions like if or Loop-While-Do are only permitted inside defun definitions (level 2 expressions) ==> Future ToDo
 // Level 1 and common expressions (arithmetic etc.) are also permitted inside a defun definition
 
-            | '(' LOOP WHILE                    { /* */  }  
-                 expression                     {  /* */ } 
-                 DO exprSeq ')'                 {  /* */ }
+            | '(' LOOP WHILE                    { printf (" BEGIN ") ; }  
+                 expression                     { printf (" WHILE ") ; } 
+                 DO exprSeq ')'                 { printf (" REPEAT\n") ; }
 
             | '(' ifHead  expression1 ')'       { printf (" THEN\n") ; }     // If Expression then Expression1
                                                                              // ifHead is used to avoid conflicts through partial factorization
@@ -106,9 +115,15 @@ ifHead:       IF expression                     { printf (" IF ") ; }        // 
 expression:   operand                                   { ; }                // Common expressions combine arithmetic, relational and boolean expressions, including base operands.
 
             | '(' '-' expression expression ')'         { printf (" - ") ; }      // binary minus operator 
-
-/* - * / MOD AND OR > < GE LE ... NOT */
-
+            | '(' '+' expression expression ')'         { printf (" + ") ; }      
+            | '(' '*' expression expression ')'         { printf (" * ") ; }      
+            | '(' '/' expression expression ')'         { printf (" / ") ; }   
+            | '(' MOD expression expression ')'         { printf (" MOD ") ; }    
+            | '(' NEQ expression expression ')'         { printf (" <> ") ; }   
+            | '(' '>' expression expression ')'         { printf (" > ") ; }     
+            | '(' '<' expression expression ')'         { printf (" < ") ; }      
+            | '(' '=' expression expression ')'         { printf (" = ") ; }      
+            | '(' AND expression expression ')'         { printf (" AND ") ; }    
             | '(' '-' expression ')'                    { printf (" negate ") ; } // Unary minus operator in Lisp
             ;
 
@@ -202,6 +217,10 @@ t_keyword keywords [] = {     // define the keywords
     "and",         AND,
     "if",          IF,
     "progn",       PROGN,
+    "setq",        SETQ,
+    "setf",        SETF,
+    "mod",         MOD,       
+    "/=",          NEQ,
     NULL,          0          // 0 to mark the end of the table
 } ;
 

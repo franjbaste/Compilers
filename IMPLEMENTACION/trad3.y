@@ -1,6 +1,6 @@
 %{                          // SECCION 1 Declaraciones de C-Yacc
 /*
-Grupo 84: Fran Jurado Basté, Sergio González Jiménez
+407, Fran Jurado Basté, Sergio González Jiménez
 Correos: 100522213@alumnos.uc3m.es, 100522264@alumnos.uc3m.es
 */
 
